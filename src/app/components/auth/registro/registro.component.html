@@ -1,0 +1,31 @@
+<div class="container">
+  <h1>Registrate</h1>
+  <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+    <mat-form-field appearance="fill">
+      <mat-label for="user_name">Nombre: </mat-label>
+      <!-- <input matInput type="text" [formControl]="nombre" placeholder="Nombre" /> -->
+      <input class="pr" matInput [formControl]="name" placeholder="Nombre"/>
+      <mat-error *ngIf="name.hasError('required')">El nombre es obligatorio</mat-error>
+      <mat-error *ngIf="name.hasError('minlength')">
+        Nombre debe ser mínimo de 5 caracteres de longitud.
+      </mat-error>
+      <mat-error *ngIf="name.hasError('maxlength')">
+        Nombre debe ser de máximo 25 caracteres de longitud.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [formControl]="email" placeholder="Correo electrónico" />
+      <mat-error *ngIf="email.hasError('required')">El correo electrónico es obligatorio</mat-error>
+      <mat-error *ngIf="email.hasError('pattern')">Ingrese un correo electrónico válido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [formControl]="password" type="password" placeholder="Contraseña" />
+      <mat-error *ngIf="password.hasError('required')">La contraseña es obligatoria</mat-error>
+      <mat-error *ngIf="password.hasError('minlength')">La contraseña debe tener al menos 8 caracteres</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Registrate</button>
+  </form>
+</div>

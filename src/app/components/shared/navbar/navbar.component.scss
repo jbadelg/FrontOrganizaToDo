@@ -1,0 +1,22 @@
+
+.mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  background-color: #1976d2;
+}
+
+.auth-links {
+  display: flex;
+  align-items: center;
+}
+
+.auth-links a {
+  margin-left: 10px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  background-color: #fff;
+  color: #1976d2;
+}
