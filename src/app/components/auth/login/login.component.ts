@@ -23,7 +23,7 @@ export class LoginComponent {
     private tareaService: TareaServiceService,
     private router: Router
   ) {
-      this.userDto = new UserDTO('','','');
+      this.userDto = new UserDTO('','','','');
       this.isValidForm = null;
       this.email = new FormControl(this.userDto.email, [
         Validators.required,
@@ -52,6 +52,7 @@ export class LoginComponent {
       name: '',
       email: this.userDto.email,
       password: this.userDto.password,
+      password_confirmation: this.userDto.password
     };
     // this.tareaService.getAllTasks().subscribe((result:any) => {alert("tarea agregada!");console.log(result);}); //si trae resultados
     this.userService.login(user)
@@ -60,6 +61,7 @@ export class LoginComponent {
       this.userDto.name = '';
       this.userDto.email = '';
       this.userDto.password = '';
+      this.userDto.password_confirmation = '';
       this.router.navigateByUrl("listarTareas");
     });
 

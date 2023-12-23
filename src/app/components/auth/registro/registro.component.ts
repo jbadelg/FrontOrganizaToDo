@@ -25,7 +25,7 @@ export class RegistroComponent implements OnInit {
     private userService: UserServiceService,
     private router: Router
   ) {
-      this.userDto = new UserDTO('','','');
+      this.userDto = new UserDTO('','','','');
       this.isValidForm = null;
       this.name = new FormControl(this.userDto.name,[
         Validators.required,
@@ -51,7 +51,7 @@ export class RegistroComponent implements OnInit {
 
   registrar(): void {
     this.isValidForm = false;
-    console.log(this.registroForm.value);
+    console.log("datos form; ", this.registroForm.value);
     if (this.registroForm.invalid) {
       return;
     }
@@ -62,6 +62,7 @@ export class RegistroComponent implements OnInit {
       name: this.userDto.name,
       email: this.userDto.email,
       password: this.userDto.password,
+      password_confirmation: this.userDto.password,
     };
     this.userService.register(user)
     .subscribe((result:any) => {
@@ -69,6 +70,7 @@ export class RegistroComponent implements OnInit {
       this.userDto.name = '';
       this.userDto.email = '';
       this.userDto.password = '';
+      this.userDto.password_confirmation = '';
       this.router.navigateByUrl("listarTareas");
     });
 
