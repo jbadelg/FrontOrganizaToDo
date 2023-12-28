@@ -1,8 +1,13 @@
 <mat-toolbar color="primary">
   <span routerLink="/">OrganizaToDo</span>
   <span class="spacer"></span>
-  <div class="auth-links">
+  <div class="auth-links" *ngIf="showNoAuthSection">
     <a mat-button routerLink="/login">Login</a>
     <a mat-button routerLink="/register">Register</a>
   </div>
+  <div class="auth-links" *ngIf="showAuthSection">
+    <a mat-button routerLink="/crearTarea">Crear Tarea</a>
+    <a mat-button (click)="logout()">Logout</a>
+  </div>
+
 </mat-toolbar>

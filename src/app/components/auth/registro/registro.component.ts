@@ -6,6 +6,14 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import { UserServiceService } from 'src/app/services/user-service.service';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { FeedbackService } from 'src/app/services/feedback.service';
+import { finalize } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { HeaderMenus } from 'src/app/Models/header-menus.dto';
+import { HeaderMenusService } from 'src/app/services/header-menus.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { AuthDTO } from 'src/app/Models/auth.dto';
 
 @Component({
   selector: 'app-registro',
@@ -22,7 +30,10 @@ export class RegistroComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private userService: UserServiceService,
+    private authService: AuthService,
+    private sharedService: FeedbackService,
+    private localStorageService: LocalStorageService,
+    private headerMenusService: HeaderMenusService,
     private router: Router
   ) {
       this.userDto = new UserDTO('','','','');
@@ -51,7 +62,11 @@ export class RegistroComponent implements OnInit {
 
   registrar(): void {
     this.isValidForm = false;
+    let responseOK: boolean = false;
+    let errorResponse: any;
+
     console.log("datos form; ", this.registroForm.value);
+
     if (this.registroForm.invalid) {
       return;
     }
@@ -64,15 +79,57 @@ export class RegistroComponent implements OnInit {
       password: this.userDto.password,
       password_confirmation: this.userDto.password,
     };
-    this.userService.register(user)
-    .subscribe((result:any) => {
-      alert("tarea agregada!");
-      this.userDto.name = '';
-      this.userDto.email = '';
-      this.userDto.password = '';
-      this.userDto.password_confirmation = '';
-      this.router.navigateByUrl("listarTareas");
-    });
+    this.authService
+      .register(user)
+      .pipe(
+        finalize(async () => {
+          await this.sharedService.managementToast(
+            "formFeedback",
+            responseOK,
+            errorResponse
+          );
+          if (responseOK) {
+            const headerInfo: HeaderMenus = {
+              showAuthSection: true,
+              showNoAuthSection: false,
+            };
+            this.registroForm.reset();
+            this.headerMenusService.headerManagement.next(headerInfo);
+            this.router.navigateByUrl("listarTareas");
+          }
+        })
+      )
+      .subscribe(
+        (resp: AuthDTO) => {
+          responseOK = true;
+          this.localStorageService.set("user_id", resp.user.id.toString());
+          this.localStorageService.set(
+            "access_token",
+            resp.token
+          );
+          this.localStorageService.set("user_name", resp.user.name);
+        },
+        (error: HttpErrorResponse) => {
+          responseOK = false;
+          errorResponse = error.error;
+
+          const headerInfo: HeaderMenus = {
+            showAuthSection: false,
+            showNoAuthSection: true,
+          };
+
+          this.headerMenusService.headerManagement.next(headerInfo);
+          this.sharedService.errorLog(errorResponse);
+        }
+      );
+    // .subscribe((result:any) => {
+    //   alert("tarea agregada!");
+    //   this.userDto.name = '';
+    //   this.userDto.email = '';
+    //   this.userDto.password = '';
+    //   this.userDto.password_confirmation = '';
+    //   this.router.navigateByUrl("listarTareas");
+    // });
 
   }
 }

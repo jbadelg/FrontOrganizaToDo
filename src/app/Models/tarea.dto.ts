@@ -1,24 +1,24 @@
 export class TareaDTO {
-  tarea_id!: string;
-  tarea_nombre: string;
-  tarea_estadoTarea!: string;
-  tarea_user_id: string;
-  tarea_categoria_id: string;
-  tarea_tipoTarea: string;
-  tarea_descripcion!: string;
-  tarea_fechaInicio!: string;
-  tarea_fechaVencimiento!: string;
-  tarea_duracion!: string;
-  tarea_valor!: string;
-  tarea_recurrente!: string;
-  tarea_periodicidadRecurrencia!: string;
-  tarea_subtarea_id!: string;
-  tarea_amigo_id!: string;
+  id!: string;
+  nombre: string;
+  estadoTarea!: string;
+  user_id: string;
+  categoria_id: string;
+  tipoTarea: string;
+  descripcion!: string;
+  fechaInicio!: string;
+  fechaVencimiento!: string;
+  duracion!: string;
+  valor!: string;
+  recurrente!: string;
+  periodicidadRecurrencia!: string;
+  subtarea_id!: string;
+  amigo_id!: string;
 
-  constructor(tarea_nombre: string, tarea_tipoTarea: string, tarea_user_id: string, tarea_categoria_id: string) {
-    this.tarea_nombre = tarea_nombre;
-    this.tarea_tipoTarea = tarea_tipoTarea;
-    this.tarea_user_id = tarea_user_id;
-    this.tarea_categoria_id = tarea_categoria_id;
+  constructor(nombre: string, tipoTarea: string, user_id: string, categoria_id: string) {
+    this.nombre = nombre;
+    this.tipoTarea = tipoTarea;
+    this.user_id = user_id;
+    this.categoria_id = categoria_id;
   }
 }

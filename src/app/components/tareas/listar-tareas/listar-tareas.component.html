@@ -1,1 +1,11 @@
-<p>listar-tareas works!</p>
+
+ <!-- <mat-list>
+  <mat-list-item *ngFor="let task of listaTareas">{{task.nombre}}</mat-list-item>
+</mat-list> -->
+
+<mat-selection-list #list [multiple]="false" [(ngModel)]="selectedOptions">
+  <mat-list-option *ngFor="let task of listaTareas" [value]="task.id">
+    {{task.nombre}} {{task.fechaVencimiento}}
+  </mat-list-option>
+
+</mat-selection-list>
