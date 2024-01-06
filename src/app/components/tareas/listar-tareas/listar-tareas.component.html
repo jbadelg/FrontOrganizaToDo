@@ -1,11 +1,63 @@
+<mat-list>
+  <div class="list-header">
+    <h1>Todas tus tareas</h1>
+    <!-- <button mat-button (click)="verFinalizadas()">Mostrar Finalizadas</button> -->
+    <mat-slide-toggle [(ngModel)]="verFinalizadas" color="secondary">Ver Finalizadas</mat-slide-toggle>
+  </div>
+  <mat-list-item id="matItem" class="Cmat-list-item" *ngFor="let tarea of listaTareas" [ngClass]="{'tarea-completada': tarea.estadoTarea === 'completada'}">
+    <div class="cont-flex" *ngIf="verFinalizadas || (!verFinalizadas && tarea.estadoTarea !== 'completada')">
+      <!-- <div class="styled-checkbox" [class.completed]="tarea.estadoTarea === 'completada'" (click)="switchEstadoTarea(tarea)">
+        <div class="checkmark" *ngIf="tarea.estadoTarea === 'completada'">&#10003;</div>
+      </div> -->
+
+      <mat-checkbox  id="idcheck" class="Ccheckbox" [checked]="tarea.estadoTarea === 'completada'" (change)="switchEstadoTarea(tarea)" ></mat-checkbox>
+      <div class="contenido-tarea">
+        <div class="info-tarea">
+          <div matListItemTitle class="nombre-tarea">{{ tarea.nombre }}</div>
+          <mat-icon (click)="eliminarTarea(tarea.id)">delete</mat-icon>
+        </div>
+        <div matListItemLine class="descripcion-tarea" *ngIf="tarea.descripcion != null">
+          {{ tarea.descripcion | slice:0:25 }}
+        </div>
+        <div class="info-tarea">
+          <div class="fecha-tarea">{{ tarea.fechaVencimiento | date:'shortDate' }}</div>
+          <mat-chip-set class="categoria-tarea">
+            <mat-chip [style.background-color]="tarea.categoria_color" style="font-size: 8px;">
+              {{ tarea.categoria_nombre }}
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+      </div>
+    </div>
+  </mat-list-item>
+</mat-list>
+
 
  <!-- <mat-list>
   <mat-list-item *ngFor="let task of listaTareas">{{task.nombre}}</mat-list-item>
 </mat-list> -->
 
-<mat-selection-list #list [multiple]="false" [(ngModel)]="selectedOptions">
+<!-- <mat-selection-list #list [multiple]="false" [(ngModel)]="selectedOptions">
   <mat-list-option *ngFor="let task of listaTareas" [value]="task.id">
-    {{task.nombre}} {{task.fechaVencimiento}}
+    {{task.nombre}} {{task.fechaVencimiento}} {{task.categoria_nombre}}
   </mat-list-option>
+</mat-selection-list> -->
 
-</mat-selection-list>
+ <!-- <div class="centered-list">
+  <mat-selection-list #list [multiple]="false" [(ngModel)]="selectedOptions">
+    <mat-list-option *ngFor="let task of listaTareas" [value]="task.id">
+      <div class="list-item">
+        <div class="task-info">
+          <span>{{task.nombre}}</span>
+          <span>{{task.fechaVencimiento}}</span>
+        </div>
+        <div class="categoria-info">
+          <span>{{task.categoria_nombre}}</span>
+        </div>
+      </div>
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+<div>la opcion es {{selectedOptions}}</div> -->
+
+

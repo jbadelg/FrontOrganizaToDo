@@ -1,0 +1,163 @@
+mat-list{
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  align-items: center;
+}
+/* list header */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+}
+
+h1 {
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+button {
+  margin-left: auto;
+}
+
+/* fin header*/
+.cont-flex{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+//
+
+// #idcheck {
+//   // background-color: black;
+//   background-color: red;
+// }
+
+mat-list-item.Cmat-list-item {
+  border-bottom: 1px solid #ccc;
+  // margin-bottom: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  // display: flex;
+  align-items: center;
+  // padding: 16px;
+  height: fit-content;
+  // width: 40%;
+  // margin: 0 auto;
+  box-sizing: border-box;
+  &:hover {
+    background-color: #f0f0f0;
+  }
+  &.tarea-completada {
+    background-color: #6b6a6a;
+    color: #888;
+  }
+}
+
+mat-checkbox.Cmat-checkbox {
+  margin-right: 16px;
+}
+
+.contenido-tarea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+}
+
+.nombre-tarea {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.descripcion-tarea {
+  color: #555;
+  // margin-bottom: 4px;
+}
+
+.info-tarea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  .fecha-tarea {
+    font-size: 14px;
+    color: #555;
+  }
+
+  .categoria-tarea {
+    // padding: 8px;
+    border-radius: 4px;
+    color: white;
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  mat-list-item.Cmat-list-item {
+    width: 70%;
+  }
+}
+
+.tarea-completada {
+  .mdc-list-item__primary-text {
+    color: white;
+  }
+  .descripcion-tarea  {
+    color: #e4e4e4;
+  }
+  .fecha-tarea{
+    color: #a7ff91;
+  }
+}
+
+.mat-mdc-standard-chip {
+  --mdc-chip-label-text-size: 10px;
+}
+
+.mat-mdc-list-base {
+ --mdc-list-list-item-hover-label-text-color:#991111;
+}
+
+/* check box sin material */
+/*
+.styled-checkbox {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #838282;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+
+.styled-checkbox.completed {
+  background-color: #991111;
+  border: 2px solid yellow;
+}
+
+.checkmark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  color: #a7ff91;
+  display: none;
+}
+
+.styled-checkbox.completed .checkmark {
+  display: block;
+}
+*/
+.mat-icon {
+  color: #991111;
+}
+.mat-icon:hover {
+  color: red;
+}

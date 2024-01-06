@@ -4,6 +4,8 @@ export class TareaDTO {
   estadoTarea!: string;
   user_id: string;
   categoria_id: string;
+  categoria_nombre!: string;
+  categoria_color!: string;
   tipoTarea: string;
   descripcion!: string;
   fechaInicio!: string;

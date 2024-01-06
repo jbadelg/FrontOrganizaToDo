@@ -98,8 +98,6 @@ export class LoginComponent {
           // this.loginUser.user_id = resp.user_id;
           // this.loginUser.access_token = resp.access_token;
 
-          console.log("respuesta login ... ", resp  );
-          console.log("respuesta token ... ", resp.token  );
           this.localStorageService.set("user_id", resp.user.id.toString());
           this.localStorageService.set(
             "access_token",
