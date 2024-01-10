@@ -32,8 +32,9 @@ export class TareaServiceService implements OnInit {
   }
 
   createTask(task: TareaDTO): Observable<TareaDTO> {
+    this.obtenerCredenciales();
     return this.http
-      .post<TareaDTO>(this.urlApi, task,{headers: this.headers});
+      .post<TareaDTO>(this.urlApi, task, {headers: this.headers});
   }
   getAllTasks(): Observable<TareaDTO[]> {
     // const token = this.localStorageService.get("access_token");
@@ -48,6 +49,7 @@ export class TareaServiceService implements OnInit {
     return this.http
       .put<string>(this.urlApi + "/" + task.id, task,{headers: this.headers});
   }
+
   deleteTask(id: string): Observable<string> {
     this.obtenerCredenciales();
     return this.http

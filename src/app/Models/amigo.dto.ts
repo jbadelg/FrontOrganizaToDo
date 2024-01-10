@@ -1,11 +1,11 @@
 export class AmigoDTO {
-  amigo_id!: string;
-  amigo_nombre: string;
-  amigo_email: string;
-  amigo_userId!: string;
+  id!: string;
+  nombre: string;
+  email: string;
+  userId!: string;
 
-  constructor(amigo_nombre: string, amigo_email: string) {
-    this.amigo_nombre = amigo_nombre;
-    this.amigo_email = amigo_email;
+  constructor(nombre: string, email: string) {
+    this.nombre = nombre;
+    this.email = email;
   }
 }

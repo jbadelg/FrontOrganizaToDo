@@ -12,7 +12,10 @@ import { TareaDTO } from 'src/app/Models/tarea.dto';
 import { UserServiceService } from 'src/app/services/user-service.service';
 import { forkJoin, of } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
+import { CrearTareaComponent } from '../crear-tarea/crear-tarea.component';
 
 @Component({
   selector: 'app-listar-tareas',
@@ -33,7 +36,8 @@ export class ListarTareasComponent implements OnInit {
     private tareaService: TareaServiceService,
     private userService: UserServiceService,
     private sharedService: FeedbackService,
-    private categoriaService: CategoriaServiceService
+    private categoriaService: CategoriaServiceService,
+    public dialog: MatDialog
   ) {
       this.categoryId = null;
       this.selectedOptions = '';
@@ -52,6 +56,7 @@ export class ListarTareasComponent implements OnInit {
   }
   getAllTasks() {
     this.isResLoaded = true;
+    this.sharedService.setLoading(true);
 
     this.userService.getUserTasks().pipe(
       mergeMap(tasks => {
@@ -75,6 +80,7 @@ export class ListarTareasComponent implements OnInit {
             this.listaTareas = tasks;
             this.isResLoaded = false;
             // Emite las tareas actualizadas
+            this.sharedService.setLoading(false);
             return of(this.listaTareas);
           })
         );
@@ -124,8 +130,8 @@ export class ListarTareasComponent implements OnInit {
       tarea.estadoTarea = "completada";
     }
     this.tareaService.updateTask(tarea).subscribe((tarea:any)=>{
-      this.isResLoaded = false;
       this.getAllTasks();
+      this.isResLoaded = false;
     });
   }
   eliminarTarea(id: string) {
@@ -135,5 +141,16 @@ export class ListarTareasComponent implements OnInit {
       this.getAllTasks();
       this.isResLoaded = false;
     })
+  }
+
+  agregarTarea(){
+    console.log("agregar tarea");
+    const dialogRef = this.dialog.open(CrearTareaComponent, {
+      width: '40%', // Ajusta el ancho según tus necesidades
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.getAllTasks();
+    });
   }
 }

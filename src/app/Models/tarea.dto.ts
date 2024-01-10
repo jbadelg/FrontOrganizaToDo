@@ -12,7 +12,7 @@ export class TareaDTO {
   fechaVencimiento!: string;
   duracion!: string;
   valor!: string;
-  recurrente!: string;
+  recurrente!: boolean;
   periodicidadRecurrencia!: string;
   subtarea_id!: string;
   amigo_id!: string;

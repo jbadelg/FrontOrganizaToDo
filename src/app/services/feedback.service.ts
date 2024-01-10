@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { throwError } from 'rxjs';
+import { Observable, ReplaySubject, throwError } from 'rxjs';
 
 export interface ResponseError {
   statusCode: number;
@@ -16,8 +16,12 @@ export interface ResponseError {
   providedIn: 'root'
 })
 export class FeedbackService {
+  private loading$!: ReplaySubject<boolean>;
 
-  constructor() { }
+  constructor() {
+    this.loading$ = new ReplaySubject<boolean>(1);
+  }
+
   async managementToast(
     element: string,
     validRequest: boolean,
@@ -27,14 +31,14 @@ export class FeedbackService {
     if (toastMsg) {
       if (validRequest) {
         toastMsg.className = "show requestOk";
-        toastMsg.textContent = "Form submitted successfully.";
+        toastMsg.textContent = "Formulario enviado correctamente.";
         await this.wait(1000);
         toastMsg.className = toastMsg.className.replace("show", "");
       } else {
         toastMsg.className = "show requestKo";
         if (error?.messageDetail) {
           toastMsg.textContent =
-            "Error on form submitted, show logs. Message: " +
+            "Error enviando formulario, logs. Mensage: " +
             error?.message +
             ". Message detail: " +
             error?.messageDetail
@@ -42,7 +46,7 @@ export class FeedbackService {
             // error?.statusCode;
         } else {
           toastMsg.textContent =
-            "Error on form submitted, show logs. Message: " +
+            "Error enviando formulario, logs. Mensage: " +
             error?.message
             // + ". Status code: " +
             // error?.statusCode;
@@ -70,5 +74,11 @@ export class FeedbackService {
   handleError(error: HttpErrorResponse) {
     return throwError(() => error);
   }
+  getLoading(): Observable<boolean> {
+    return this.loading$.asObservable();
+  }
 
+  setLoading(loading: boolean) {
+    this.loading$.next(loading);
+  }
 }

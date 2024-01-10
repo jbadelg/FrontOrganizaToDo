@@ -55,7 +55,6 @@ export class LoginComponent {
     let responseOK: boolean = false;
     let errorResponse: any;
     this.isValidForm = false;
-    console.log(this.registroForm.value);
 
     if (this.registroForm.invalid) {
       return;
@@ -73,6 +72,7 @@ export class LoginComponent {
     this.loginUser.user.email = this.userDto.email;
     // this.loginUser.user.password = this.userDto.password;
     // this.tareaService.getAllTasks().subscribe((result:any) => {alert("tarea agregada!");console.log(result);}); //si trae resultados
+    this.sharedService.setLoading(true);
     this.authService
       .login(user)
       .pipe(

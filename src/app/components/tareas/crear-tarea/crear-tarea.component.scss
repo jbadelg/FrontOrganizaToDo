@@ -1,0 +1,22 @@
+.container,
+.container form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  // gap: 1em;
+}
+mat-form-field{
+  width: 100%;
+}
+form{
+  width: 100%;
+}
+.seguidos{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  max-width: 100%;
+}
+
+

@@ -1,1 +1,100 @@
-<p>crear-tarea works!</p>
+<h2 mat-dialog-title>Agregar Tarea</h2>
+
+<mat-dialog-content>
+  <div class="container">
+    <form *ngIf="tareaForm" [formGroup]="tareaForm" (ngSubmit)="addTarea()">
+      <mat-form-field appearance="fill" color="accent">
+        <mat-label>Título de tu tarea</mat-label>
+        <input matInput [formControl]="nombre" placeholder="nombre" />
+        <mat-error *ngIf="nombre.hasError('required')">El nombre de la tarea es obligatorio</mat-error>
+        <mat-error *ngIf="nombre.hasError('maxlength')">El nombre de la tarea máximo 55 char</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" color="accent">
+        <mat-label>Descripción</mat-label>
+        <input matInput [formControl]="descripcion" placeholder="descripción" />
+        <mat-error *ngIf="descripcion.hasError('maxlength')">La descripcion de la tarea máximo 55 char</mat-error>
+      </mat-form-field>
+      <div class="seguidos">
+        <mat-form-field appearance="fill" color="accent">
+          <mat-label>Categoría</mat-label>
+          <mat-select formControlName="categoria_id" placeholder="Categoria">
+            <mat-option *ngFor="let categoria of categorias" [value]="categoria.categoria_id">
+               <mat-chip-set>
+                  <mat-chip [style.background-color]="categoria.categoria_color">
+                    {{ categoria.categoria_nombre }}
+                  </mat-chip>
+                </mat-chip-set>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="categoria_id.hasError('required')">Obligatoria!</mat-error>
+        </mat-form-field>
+        <mat-slide-toggle [formControl]="esRecordatorio" color="warn">Recordatorio</mat-slide-toggle>
+        <!-- <mat-form-field appearance="fill" color="accent">
+          <mat-label>Tipo de tarea</mat-label>
+          <mat-select formControlName="tipoTarea" placeholder="Tipo de Tarea">
+            <mat-option *ngFor="let tipo of tiposTareas" [value]="tipo">
+              {{tipo}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>-->
+        <mat-form-field appearance="fill" color="accent">
+          <mat-label>Fecha Inicio</mat-label>
+          <input matInput [formControl]="fechaInicio" [matDatepicker]="picker1">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill" color="accent">
+          <mat-label>Fecha Fin</mat-label>
+          <input matInput [formControl]="fechaVencimiento" [matDatepicker]="picker2">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="seguidos">
+        <mat-form-field appearance="fill" color="accent">
+          <mat-label>Valor</mat-label>
+          <input matInput [formControl]="valor" placeholder="valor"  (input)="formatoMoneda($event)"/>
+          <mat-error *ngIf="valor.hasError('pattern')">Valor es numerico</mat-error>
+        </mat-form-field>
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>Recurrente</mat-label>
+          <mat-select [formControl]="recurrente" placeholder="recurrente" >
+            <mat-option value="si">Si</mat-option>
+            <mat-option value="no">No</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <mat-slide-toggle [formControl]="recurrente" color="primary">Recurrente</mat-slide-toggle>
+        <!-- <mat-form-field appearance="fill" *ngIf="tareaForm.get('recurrente')?.value === 'si'"> -->
+        <mat-form-field appearance="fill" *ngIf="tareaForm.get('recurrente')?.value">
+          <mat-label>Periodicidad Recurrencia</mat-label>
+          <mat-select [formControl]="periodicidadRecurrencia" placeholder="Periodicidad">
+            <mat-option value="diario">Diario</mat-option>
+            <mat-option value="semanal">Semanal</mat-option>
+            <mat-option value="mensual">Mensual</mat-option>
+            <mat-option value="bimestral">Bimestral</mat-option>
+            <mat-option value="trimestral">Trimestral</mat-option>
+            <mat-option value="semestral">Semestral</mat-option>
+            <mat-option value="anual">Anual</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" color="accent">
+          <mat-label>Asignar a:</mat-label>
+          <mat-select formControlName="amigo_id" placeholder="Amigo">
+            <mat-option *ngFor="let amigo of amigos" [value]="amigo.id">
+               {{amigo.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="cerrar()">Cancelar</button>
+  <button mat-button (click)="addTarea()" type="submit">Agregar Tarea</button>
+</mat-dialog-actions>
+
+

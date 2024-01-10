@@ -30,6 +30,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatButtonModule} from '@angular/material/button';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { HttpClientModule} from "@angular/common/http";
 import {MatListModule} from '@angular/material/list';
 
@@ -63,10 +68,15 @@ import {MatListModule} from '@angular/material/list';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
     MatInputModule,
+    MatDialogModule,
     MatListModule,
     MatCheckboxModule,
     MatChipsModule,
+    MatNativeDateModule,
+    MatProgressSpinnerModule,
     MatSlideToggleModule,
     MatIconModule,
     MatToolbarModule
