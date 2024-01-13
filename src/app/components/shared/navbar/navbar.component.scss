@@ -2,21 +2,26 @@
 .mat-toolbar {
   display: flex;
   justify-content: space-between;
+  // justify-content: center;
   background-color: #1976d2;
 }
 
-.auth-links {
-  display: flex;
-  align-items: center;
-}
+// .auth-links {
+//   display: flex;
+//   align-items: center;
+// }
 
-.auth-links a {
-  margin-left: 10px;
-  color: #fff;
-  text-decoration: none;
-}
 
 .auth-links a:hover {
   background-color: #fff;
   color: #1976d2;
 }
+
+.spacer {
+  flex: 1 1 auto;
+}
+.spacer1 {
+  flex: 1 1 auto;
+}
+
+

@@ -1,1 +1,23 @@
-<p>sidenav works!</p>
+<mat-drawer-container autosize>
+  <mat-drawer #drawer *ngIf="showAuthSection" opened="true" mode="side" position="start">
+  <mat-nav-list>
+      <mat-list-item>
+          <button routerLink="card" mat-button><mat-icon color="accent">calendar_month</mat-icon> Fechas</button>
+      </mat-list-item>
+      <mat-list-item>
+          <button routerLink="listarTareas" mat-button><mat-icon color="accent">home</mat-icon> Home</button>
+      </mat-list-item>
+      <mat-list-item>
+          <button routerLink="slider" mat-button><mat-icon color="accent">category</mat-icon> Categorias</button>
+      </mat-list-item>
+      <mat-list-item>
+          <button routerLink="table" mat-button><mat-icon color="accent">diversity_3</mat-icon> Amigos</button>
+      </mat-list-item>
+  </mat-nav-list>
+  </mat-drawer>
+  <mat-drawer-content>
+      <div style="text-align: center;min-height: 600px;">
+          <router-outlet></router-outlet>
+      </div>
+  </mat-drawer-content>
+</mat-drawer-container>

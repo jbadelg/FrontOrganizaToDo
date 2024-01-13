@@ -1,13 +1,22 @@
 <mat-toolbar color="primary">
-  <span routerLink="/">OrganizaToDo</span>
-  <span class="spacer"></span>
+    <div style="display: flex;width: 100%;flex-direction: row;align-items: center;">
+      <button (click)="toggleDrawer()" mat-icon-button >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div routerLink="/">OrganizaToDo</div>
+    </div>
+  <span class="spacer" ></span>
   <div class="auth-links" *ngIf="showNoAuthSection">
-    <a mat-button routerLink="/login">Login</a>
-    <a mat-button routerLink="/register">Register</a>
+      <button routerLink="/register" mat-button >Register</button>
+      <button routerLink="/login" mat-raised-button color="accent">Login</button>
+  </div>
+  <div class="barra-tareas" *ngIf="showAuthSection">
+    <button mat-fab routerLink="/crearTarea" (click)="agregarTarea()">
+      <mat-icon>add_task</mat-icon>
+    </button>
   </div>
   <div class="auth-links" *ngIf="showAuthSection">
-    <a mat-button routerLink="/crearTarea">Crear Tarea</a>
-    <a mat-button (click)="logout()">Logout</a>
+    <button mat-button (click)="logout()">Logout</button>
   </div>
-
 </mat-toolbar>
+

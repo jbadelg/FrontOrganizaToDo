@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TareaDTO } from 'src/app/Models/tarea.dto';
 import { CategoriaServiceService } from 'src/app/services/categoria-service.service';
 import { FeedbackService } from 'src/app/services/feedback.service';
@@ -50,14 +50,15 @@ export class CrearTareaComponent implements OnInit {
   // picker1: any;
 
   constructor(
-    public dialogRef: MatDialogRef<CrearTareaComponent>,
+    @Optional() public dialogRef: MatDialogRef<CrearTareaComponent>,
     private activatedRoute: ActivatedRoute,
     private tareaService: TareaServiceService,
     private userService: UserServiceService,
     private localStorageService: LocalStorageService,
     private sharedService: FeedbackService,
     private formBuilder: FormBuilder,
-    private categoriaService: CategoriaServiceService
+    private categoriaService: CategoriaServiceService,
+    private router: Router,
   ){
     this.tarea = new TareaDTO('','','','');
     this.isValidForm = null;
@@ -129,7 +130,7 @@ export class CrearTareaComponent implements OnInit {
     }
     this.isValidForm = true;
     this.tarea = this.tareaForm.value;
-    console.log("this.tareaForm.value: ", this.tareaForm.value );
+    // console.log("this.tareaForm.value: ", this.tareaForm.value );
     // this.tarea.fechaInicio = this.tareaForm.controls["fechaInicio"].value?.toLocaleDateString('YYYYMMDD', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '');
     if (this.tareaForm.controls["fechaInicio"].value){
       let anno = this.tareaForm.controls["fechaInicio"].value?.getFullYear();
@@ -149,7 +150,7 @@ export class CrearTareaComponent implements OnInit {
     if (this.esRecordatorio) {
       this.tarea.tipoTarea = "recordatorio";
     }
-    console.log("tarea: ", this.tarea);
+    // console.log("tarea: ", this.tarea);
     // this.tarea.recurrente = this.tareaForm.controls["recurrente"].value === "si" ? "true" : "false";
     // this.tarea.recurrente = this.tareaForm.controls["recurrente"].value === "si";
 

@@ -75,7 +75,7 @@ export class ListarTareasComponent implements OnInit {
             tasks.forEach((task, index) => {
               task.categoria_nombre = categorias[index].data.categoria_nombre;
               task.categoria_color = categorias[index].data.categoria_color;
-              console.log("colores " + task.categoria_color);
+              // console.log("colores " + task.categoria_color);
             });
             this.listaTareas = tasks;
             this.isResLoaded = false;
@@ -85,10 +85,7 @@ export class ListarTareasComponent implements OnInit {
           })
         );
       })
-    ).subscribe(
-      tareas => {
-        // Puedes hacer algo con las tareas si es necesario
-      },
+    ).subscribe(tareas => {},
       error => {
         console.error('Error al obtener las tareas:', error);
         this.isResLoaded = false;
@@ -144,12 +141,10 @@ export class ListarTareasComponent implements OnInit {
   }
 
   agregarTarea(){
-    console.log("agregar tarea");
     const dialogRef = this.dialog.open(CrearTareaComponent, {
       width: '40%', // Ajusta el ancho según tus necesidades
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.getAllTasks();
     });
   }

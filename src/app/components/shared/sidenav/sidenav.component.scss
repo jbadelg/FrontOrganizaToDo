@@ -1,0 +1,24 @@
+.sidenav-container {
+  display: flex;
+  height: 100%;
+}
+
+.sidenav {
+  width: 200px;
+  box-shadow: 3px 0 6px rgba(0, 0, 0, 0.1); /* Agregamos una sombra para resaltar el sidenav */
+}
+
+.mat-nav-list {
+  padding-top: 20px;
+}
+
+.mat-nav-list a {
+  text-decoration: none;
+  color: #333;
+  display: block; /* Asegura que los elementos de la lista se extiendan al ancho del sidenav */
+  padding: 10px; /* Añade un espacio alrededor de los elementos de la lista */
+}
+
+.mat-nav-list a:hover {
+  background-color: #eee;
+}
