@@ -11,11 +11,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TareaDTO } from 'src/app/Models/tarea.dto';
 import { UserServiceService } from 'src/app/services/user-service.service';
 import { forkJoin, of } from 'rxjs';
-import { mergeMap, catchError } from 'rxjs/operators';
+import { mergeMap, catchError, map } from 'rxjs/operators';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { CrearTareaComponent } from '../crear-tarea/crear-tarea.component';
+import { CategoriaDTO } from 'src/app/Models/categoria.dto';
+import { AmigoDTO } from 'src/app/Models/amigo.dto';
 
 @Component({
   selector: 'app-listar-tareas',
@@ -25,6 +27,8 @@ import { CrearTareaComponent } from '../crear-tarea/crear-tarea.component';
 export class ListarTareasComponent implements OnInit {
   listaTareas: any[] = [];
   listaTareasRta: TareaDTO[] = [];
+  listaCategorias: CategoriaDTO[] = [];
+  listaAmigos: AmigoDTO[] = [];
   isResLoaded = false;
   categoryId: string | null;
   selectedOptions: string;
@@ -44,16 +48,36 @@ export class ListarTareasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.paramMap.subscribe((parms: ParamMap) => {
-      this.categoryId = parms.get("id");
-      if (this.categoryId) {
-        this.getFiltredTasks(this.categoryId);
-      } else {
-        this.getAllTasks();
-      }
-    });
+    forkJoin([
+      this.traerCategorias(),
+      this.traerAmigos()
+    ]).subscribe(([categorias, amigos])=>{
 
+      this.activatedRoute.paramMap.subscribe((parms: ParamMap) => {
+        this.categoryId = parms.get("id");
+        if (this.categoryId) {
+          this.getFiltredTasks(this.categoryId);
+        } else {
+          this.getAllTasks1();
+        }
+      });
+    });
   }
+  private traerCategorias() {
+    return this.userService.getUserCategorias().pipe(
+      map(cats => {
+        this.listaCategorias = cats.data.map((item:any) => new CategoriaDTO(item));
+      })
+    )
+  }
+  private traerAmigos() {
+    return this.userService.getUserAmigos().pipe(
+      map(amigos => {
+        this.listaAmigos = amigos;
+      })
+    );
+  }
+
   getAllTasks() {
     this.isResLoaded = true;
     this.sharedService.setLoading(true);
@@ -94,10 +118,17 @@ export class ListarTareasComponent implements OnInit {
   }
   getAllTasks1() {
     this.isResLoaded = true;
+    this.sharedService.setLoading(true);
     this.userService.getUserTasks().subscribe(
       (tasks) => {
+        tasks.forEach((task, index) => {
+          const categoriaEncontrada = this.listaCategorias.find(cat => cat.categoria_id === task.categoria_id);
+          if (categoriaEncontrada) {
+            task.categoria_nombre = categoriaEncontrada.categoria_nombre;
+            task.categoria_color = categoriaEncontrada.categoria_color;
+          }
+        });
         this.listaTareasRta = tasks;
-        // this.listaTareasRta[0].categoria_nombre =
         this.listaTareas = this.listaTareasRta;
       }
     );
@@ -127,7 +158,7 @@ export class ListarTareasComponent implements OnInit {
       tarea.estadoTarea = "completada";
     }
     this.tareaService.updateTask(tarea).subscribe((tarea:any)=>{
-      this.getAllTasks();
+      this.getAllTasks1();
       this.isResLoaded = false;
     });
   }
@@ -135,7 +166,7 @@ export class ListarTareasComponent implements OnInit {
     this.isResLoaded = true;
     console.log("borrando id " + id );
     this.tareaService.deleteTask(id).subscribe(()=>{
-      this.getAllTasks();
+      this.getAllTasks1();
       this.isResLoaded = false;
     })
   }
@@ -145,7 +176,7 @@ export class ListarTareasComponent implements OnInit {
       width: '40%', // Ajusta el ancho según tus necesidades
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.getAllTasks();
+      this.getAllTasks1();
     });
   }
 }
