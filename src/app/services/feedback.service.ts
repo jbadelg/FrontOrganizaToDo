@@ -25,13 +25,15 @@ export class FeedbackService {
   async managementToast(
     element: string,
     validRequest: boolean,
+    mensaje: string,
     error?: ResponseError
   ): Promise<void> {
     const toastMsg = document.getElementById(element);
     if (toastMsg) {
       if (validRequest) {
         toastMsg.className = "show requestOk";
-        toastMsg.textContent = "Formulario enviado correctamente.";
+        // toastMsg.textContent = "Formulario enviado correctamente.";
+        toastMsg.textContent = mensaje;
         await this.wait(1000);
         toastMsg.className = toastMsg.className.replace("show", "");
       } else {

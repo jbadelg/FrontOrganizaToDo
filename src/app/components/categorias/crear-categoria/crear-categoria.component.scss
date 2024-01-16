@@ -1,0 +1,17 @@
+.container,
+.container form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  // gap: 1em;
+}
+mat-form-field{
+  width: 100%;
+}
+form{
+  width: 100%;
+}
+mat-dialog-title{
+  margin: 0 auto;
+}

@@ -175,7 +175,7 @@ export class ListarTareasComponent implements OnInit {
 
   agregarTarea(){
     const dialogRef = this.dialog.open(CrearTareaComponent, {
-      width: '40%', // Ajusta el ancho según tus necesidades
+      width: '40%',
     });
     dialogRef.afterClosed().subscribe(result => {
       this.getAllTasks1();

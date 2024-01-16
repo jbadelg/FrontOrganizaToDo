@@ -80,6 +80,7 @@ export class LoginComponent {
           await this.sharedService.managementToast(
             "formFeedback",
             responseOK,
+            "Te has autenticado con exito!",
             errorResponse
           );
           if (responseOK) {

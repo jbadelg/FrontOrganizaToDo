@@ -72,8 +72,6 @@ export class RegistroComponent implements OnInit {
     let responseOK: boolean = false;
     let errorResponse: any;
 
-    console.log("datos form; ", this.registroForm.value);
-
     if (this.registroForm.invalid) {
       return;
     }
@@ -93,6 +91,7 @@ export class RegistroComponent implements OnInit {
           await this.sharedService.managementToast(
             "formFeedback",
             responseOK,
+            "Te has registrado correctamente!",
             errorResponse
           );
           if (responseOK) {

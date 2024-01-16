@@ -88,7 +88,11 @@
   </mat-drawer>
   <mat-drawer-content>
       <div style="text-align: center;min-height: 600px;">
-          <router-outlet></router-outlet>
+          <router-outlet>
+            <div style="margin-left: auto; margin-right: auto">
+              <p id="formFeedback"></p>
+            </div>
+          </router-outlet>
       </div>
   </mat-drawer-content>
 </mat-drawer-container>

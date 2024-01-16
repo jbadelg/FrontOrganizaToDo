@@ -60,20 +60,23 @@ export class CategoriaServiceService implements OnInit {
     categoryId: string,
     category: CategoriaDTO
   ): Observable<CategoriaDTO> {
+    this.obtenerCredenciales();
     return this.http
-      .put<CategoriaDTO>(this.urlApi + "/" + categoryId, category)
+      .put<CategoriaDTO>(this.urlApi + "/" + categoryId, category,{headers:this.headers})
       .pipe(catchError(this.sharedService.handleError));
   }
 
   deleteCategory(categoryId: string): Observable<any> {
+    this.obtenerCredenciales();
     return this.http
-      .delete<any>(this.urlApi + "/" + categoryId)
+      .delete<any>(this.urlApi + "/" + categoryId, {headers:this.headers})
       .pipe(catchError(this.sharedService.handleError));
   }
 
   getTasksByCategory(categoryId: string): Observable<any> {
+    this.obtenerCredenciales();
     return this.http
-      .get<any>(this.urlApi + "/tareas/" + categoryId)
+      .get<any>(this.urlApi + "/tareas/" + categoryId, {headers:this.headers})
       .pipe(catchError(this.sharedService.handleError));
   }
 }

@@ -35,11 +35,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 #formFeedback.requestOk {
-  background-color: green;
+  background-color: rgb(102, 224, 102);
 }
 
 #formFeedback.requestKo {
   background-color: red;
+  color: white;
 }
 
 #formFeedback.show {

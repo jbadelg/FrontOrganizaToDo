@@ -39,6 +39,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import {MatExpansionModule} from '@angular/material/expansion';
 import { HttpClientModule} from "@angular/common/http";
 import {MatListModule} from '@angular/material/list';
+import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 
 @NgModule({
   declarations: [
@@ -83,9 +84,12 @@ import {MatListModule} from '@angular/material/list';
     MatProgressSpinnerModule,
     MatSlideToggleModule,
     MatIconModule,
+    NgxMatColorPickerModule,
     MatToolbarModule
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

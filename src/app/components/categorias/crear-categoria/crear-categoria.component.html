@@ -1,1 +1,29 @@
-<p>crear-categoria works!</p>
+<div style="margin-left: auto; margin-right: auto">
+  <p id="formFeedback"></p>
+</div>
+<h2 mat-dialog-title>Agregar Categoría</h2>
+<mat-dialog-content>
+  <div class="container">
+    <form *ngIf="categoriaForm" [formGroup]="categoriaForm" (ngSubmit)="guardarCategoria()">
+      <mat-form-field appearance="fill" color="accent">
+        <mat-label>Nombre de la categoría</mat-label>
+        <input matInput [formControl]="nombre" placeholder="nombre" />
+        <mat-error *ngIf="nombre.hasError('required')">El nombre de la categoria es obligatorio</mat-error>
+        <mat-error *ngIf="nombre.hasError('maxlength')">El nombre de la tarea máximo 25 char</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" color="accent">
+        <input matInput [ngxMatColorPicker]="picker" [formControl]="colorCat">
+        <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
+        <ngx-mat-color-picker #picker [touchUi]="true" [color]="colorPalette"></ngx-mat-color-picker>
+        <mat-error *ngIf="colorCat.hasError('pattern')">Color invalido</mat-error>
+    </mat-form-field>
+    </form>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="cerrar()">Cancelar</button>
+  <button mat-button (click)="guardarCategoria()" type="submit">Guardar</button>
+</mat-dialog-actions>
+
+

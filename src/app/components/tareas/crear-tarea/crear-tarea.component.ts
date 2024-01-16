@@ -171,6 +171,7 @@ export class CrearTareaComponent implements OnInit {
           await this.sharedService.managementToast(
             "formFeedback",
             responseOK,
+            "Tarea agregada exitosamente!",
             errorResponse
           );
           if(responseOK){

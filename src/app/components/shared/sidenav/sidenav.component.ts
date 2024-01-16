@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
@@ -10,6 +11,7 @@ import { HeaderMenusService } from 'src/app/services/header-menus.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { ToggleService } from 'src/app/services/toggle.service';
 import { UserServiceService } from 'src/app/services/user-service.service';
+import { CrearCategoriaComponent } from '../../categorias/crear-categoria/crear-categoria.component';
 
 @Component({
   selector: 'app-sidenav',
@@ -18,7 +20,7 @@ import { UserServiceService } from 'src/app/services/user-service.service';
 })
 export class SidenavComponent implements OnInit{
   showNoAuthSection: boolean;
-  panel = 0;
+  panel = -1;
   showAuthSection: boolean;
   @ViewChild('drawer') drawer!: MatDrawer;
   listaCategorias: CategoriaDTO[] = [];
@@ -28,8 +30,10 @@ export class SidenavComponent implements OnInit{
     private router: Router,
     private headerMenusService: HeaderMenusService,
     public toggleService: ToggleService,
+    private categoriaService: CategoriaServiceService,
     private localStorageService: LocalStorageService,
-    private userService: UserServiceService
+    private userService: UserServiceService,
+    public dialog: MatDialog
   ){
     this.showAuthSection = false;
     this.showNoAuthSection = true;
@@ -96,11 +100,20 @@ export class SidenavComponent implements OnInit{
   }
 
   public eliminarCategoria(catId: string) {
+    this.categoriaService.deleteCategory(catId).subscribe(()=>{
+      this.traerCategorias().subscribe();
+    });
     console.log("eliminar ", catId );
   }
 
   public agregarCategoria() {
     console.log("agregar " );
+    const dialogRef = this.dialog.open(CrearCategoriaComponent, {
+      width: '25%',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.traerCategorias().subscribe();
+    });
   }
 
   public filtrarAmigo(amigoId: string){
