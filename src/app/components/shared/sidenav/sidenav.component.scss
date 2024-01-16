@@ -22,3 +22,20 @@
 .mat-nav-list a:hover {
   background-color: #eee;
 }
+
+mat-list-item.expandir {
+  height: max-content;
+  .mat-expansion-panel-header {
+    padding: 0 24px 0 0;
+  }
+}
+
+.itemNav{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// mat-panel-description{
+//   width: 100%;
+// }

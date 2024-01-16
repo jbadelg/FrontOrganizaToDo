@@ -20,6 +20,8 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { CategoriaDTO } from 'src/app/Models/categoria.dto';
 import { AmigoDTO } from 'src/app/Models/amigo.dto';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { finalize } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-crear-tarea',
@@ -113,7 +115,9 @@ export class CrearTareaComponent implements OnInit {
   }
   private traerAmigos() {
     this.userService.getUserAmigos().subscribe((amigos) => {
-      this.amigos = amigos;
+      if (amigos.message !== "El usuario no tiene amigos registrados") {
+        this.amigos = amigos;
+      }
     });
   }
 
@@ -158,9 +162,34 @@ export class CrearTareaComponent implements OnInit {
     this.tarea.user_id = this.localStorageService.get("user_id")!;
     this.tarea.estadoTarea = "pendiente";
 
-    this.tareaService.createTask(this.tarea).subscribe(()=>{
-      this.isResLoaded = false;
-    });
+    let responseOK: boolean = false;
+    let errorResponse: any;
+    this.tareaService
+      .createTask(this.tarea)
+      .pipe(
+        finalize(async () => {
+          await this.sharedService.managementToast(
+            "formFeedback",
+            responseOK,
+            errorResponse
+          );
+          if(responseOK){
+            this.tareaForm.reset();
+          }
+        })
+      )
+      .subscribe(()=>{
+        responseOK = true;
+        this.isResLoaded = false;
+      },
+      (error: HttpErrorResponse) => {
+        responseOK = false;
+        errorResponse = error.error;
+        this.sharedService.errorLog(errorResponse);
+      });
+    // this.tareaService.createTask(this.tarea).subscribe(()=>{
+    //   this.isResLoaded = false;
+    // });
     this.dialogRef.close({ nombreTarea: this.nombre });
   }
 

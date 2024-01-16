@@ -73,7 +73,9 @@ export class ListarTareasComponent implements OnInit {
   private traerAmigos() {
     return this.userService.getUserAmigos().pipe(
       map(amigos => {
-        this.listaAmigos = amigos;
+        if (amigos.message !== "El usuario no tiene amigos registrados"){
+          this.listaAmigos = amigos;
+        }
       })
     );
   }

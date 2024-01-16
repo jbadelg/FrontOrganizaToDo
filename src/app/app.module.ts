@@ -36,6 +36,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import {MatExpansionModule} from '@angular/material/expansion';
 import { HttpClientModule} from "@angular/common/http";
 import {MatListModule} from '@angular/material/list';
 
@@ -78,6 +79,7 @@ import {MatListModule} from '@angular/material/list';
     MatChipsModule,
     MatSidenavModule,
     MatNativeDateModule,
+    MatExpansionModule,
     MatProgressSpinnerModule,
     MatSlideToggleModule,
     MatIconModule,

@@ -17,7 +17,7 @@
           <mat-icon (click)="eliminarTarea(tarea.id)">delete</mat-icon>
         </div>
         <div matListItemLine class="descripcion-tarea" *ngIf="tarea.descripcion != null">
-          {{ tarea.descripcion | slice:0:25 }}
+          {{ tarea.descripcion | slice:0:80 }}
         </div>
         <div class="info-tarea">
           <div class="fecha-tarea">{{ tarea.fechaVencimiento | date:'shortDate' }}</div>

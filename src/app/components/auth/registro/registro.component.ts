@@ -14,6 +14,11 @@ import { HeaderMenus } from 'src/app/Models/header-menus.dto';
 import { HeaderMenusService } from 'src/app/services/header-menus.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { AuthDTO } from 'src/app/Models/auth.dto';
+import { CategoriaServiceService } from 'src/app/services/categoria-service.service';
+import { CategoriaDTO } from 'src/app/Models/categoria.dto';
+import { CategoriaOutDTO } from 'src/app/Models/categoriaOut.dto';
+import { TareaServiceService } from 'src/app/services/tarea-service.service';
+import { TareaDTO } from 'src/app/Models/tarea.dto';
 
 @Component({
   selector: 'app-registro',
@@ -34,6 +39,8 @@ export class RegistroComponent implements OnInit {
     private sharedService: FeedbackService,
     private localStorageService: LocalStorageService,
     private headerMenusService: HeaderMenusService,
+    private categoriaService: CategoriaServiceService,
+    private tareaService: TareaServiceService,
     private router: Router
   ) {
       this.userDto = new UserDTO('','','','');
@@ -108,6 +115,43 @@ export class RegistroComponent implements OnInit {
             resp.token
           );
           this.localStorageService.set("user_name", resp.user.name);
+
+          let idUser =  this.localStorageService.get("user_id");
+          let cat = new CategoriaOutDTO(
+             "Trabajo",
+             "#ff6c6c",
+             idUser
+          );
+          this.categoriaService.createCategory(cat).subscribe();
+          cat = new CategoriaOutDTO(
+            "Estudio",
+            "#70c7fa",
+            idUser
+          );
+          this.categoriaService.createCategory(cat).subscribe();
+          cat = new CategoriaOutDTO(
+            "Personal",
+            "#f2ff79",
+            idUser
+          );
+          this.categoriaService.createCategory(cat).subscribe(rta => {
+            let catId = rta.data.categoria_id;
+            let tarea = new TareaDTO(
+              'Crear mis tareas',
+              '',
+              idUser!,
+              catId,
+            );
+            tarea.descripcion = 'Organizar mis categorías, añadir a mis amigos y crear las tareas pendientes';
+            tarea.estadoTarea = "pendiente";
+            const fechaActual = new Date();
+            const año = fechaActual.getFullYear();
+            const mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0');
+            const dia = fechaActual.getDate().toString().padStart(2, '0');
+            tarea.fechaInicio = `${año}${mes}${dia}`;
+            this.tareaService.createTask(tarea).subscribe();
+          });
+
         },
         (error: HttpErrorResponse) => {
           responseOK = false;

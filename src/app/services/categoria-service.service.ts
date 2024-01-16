@@ -4,6 +4,7 @@ import { FeedbackService } from './feedback.service';
 import { Observable, catchError } from 'rxjs';
 import { CategoriaDTO } from '../Models/categoria.dto';
 import { LocalStorageService } from './local-storage.service';
+import { CategoriaOutDTO } from '../Models/categoriaOut.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -48,9 +49,10 @@ export class CategoriaServiceService implements OnInit {
       ;
   }
 
-  createCategory(category: CategoriaDTO): Observable<CategoriaDTO> {
+  createCategory(category: CategoriaOutDTO): Observable<any> {
+    this.obtenerCredenciales();
     return this.http
-      .post<CategoriaDTO>(this.urlApi, category)
+      .post<any>(this.urlApi, category, {headers: this.headers})
       .pipe(catchError(this.sharedService.handleError));
   }
 

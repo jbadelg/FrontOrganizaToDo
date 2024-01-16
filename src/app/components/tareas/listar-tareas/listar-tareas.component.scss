@@ -82,6 +82,7 @@ mat-checkbox.Cmat-checkbox {
 .descripcion-tarea {
   color: #555;
   // margin-bottom: 4px;
+  display: flex;
 }
 
 .info-tarea {
@@ -92,7 +93,7 @@ mat-checkbox.Cmat-checkbox {
 
   .fecha-tarea {
     font-size: 14px;
-    color: #555;
+    color: #f80404;
   }
 
   .categoria-tarea {

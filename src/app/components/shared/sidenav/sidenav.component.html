@@ -1,19 +1,90 @@
 <mat-drawer-container autosize>
   <mat-drawer #drawer *ngIf="showAuthSection" opened="true" mode="side" position="start">
-  <mat-nav-list>
-      <mat-list-item>
-        <button routerLink="listarTareas" mat-button><mat-icon color="accent">home</mat-icon> Home</button>
-      </mat-list-item>
-      <mat-list-item>
-        <button routerLink="card" mat-button><mat-icon color="accent">calendar_month</mat-icon> Fechas</button>
-      </mat-list-item>
-      <mat-list-item>
-          <button routerLink="slider" mat-button><mat-icon color="accent">category</mat-icon> Categorias</button>
-      </mat-list-item>
-      <mat-list-item>
-          <button routerLink="table" mat-button><mat-icon color="accent">diversity_3</mat-icon> Amigos</button>
-      </mat-list-item>
-  </mat-nav-list>
+    <mat-accordion class="example-headers-align" multi>
+      <mat-nav-list>
+        <mat-list-item>
+          <button routerLink="listarTareas" (click)="setPanel(-1)" mat-button><mat-icon color="accent">home</mat-icon>Home</button>
+        </mat-list-item>
+        <mat-list-item class="expandir" >
+          <mat-expansion-panel [expanded]="panel === 0" (opened)="setPanel(0)" hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <button routerLink="card" mat-button><mat-icon color="accent">calendar_month</mat-icon> Fechas</button>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-nav-list>
+              <mat-list-item><button (click)="filtroFecha('hoy')" mat-stroked-button>Hoy</button></mat-list-item>
+              <mat-list-item><button (click)="filtroFecha('semana')" mat-stroked-button>Esta semana</button></mat-list-item>
+              <mat-list-item><button (click)="filtroFecha('due')" mat-stroked-button>Vencidas</button></mat-list-item>
+            </mat-nav-list>
+          </mat-expansion-panel>
+        </mat-list-item>
+
+        <mat-list-item class="expandir" >
+          <mat-expansion-panel [expanded]="panel === 1" (opened)="setPanel(1)" hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <button routerLink="slider" mat-button><mat-icon color="accent">category</mat-icon> Categorias</button>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-nav-list>
+              <mat-list-item *ngFor="let categoria of listaCategorias">
+                <div class="itemNav">
+                  <mat-chip-set class="barraCats">
+                    <mat-chip (click)="filtroCategoria(categoria.categoria_id)" [style.background-color]="categoria.categoria_color">
+                      {{ categoria.categoria_nombre }}
+                    </mat-chip>
+                  </mat-chip-set>
+                  <div class="accionesIcons">
+                    <span (click)="editarCategoria(categoria.categoria_id)" mat-button>
+                      <mat-icon color="primary">edit</mat-icon>
+                    </span>
+                    <span (click)="eliminarCategoria(categoria.categoria_id)" mat-button>
+                      <mat-icon color="warn"> delete</mat-icon>
+                    </span>
+                  </div>
+                </div>
+              </mat-list-item>
+              <mat-list-item>
+                <button (click)="agregarCategoria()" mat-flat-button color="primary">Agregar Categoría<mat-icon color="accent">add</mat-icon></button>
+              </mat-list-item>
+            </mat-nav-list>
+          </mat-expansion-panel>
+        </mat-list-item>
+
+        <mat-list-item class="expandir">
+          <mat-expansion-panel [expanded]="panel === 2" (opened)="setPanel(2)" hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <button routerLink="table" mat-button><mat-icon color="accent">diversity_3</mat-icon> Amigos</button>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-nav-list>
+              <mat-list-item *ngFor="let amigo of listaAmigos">
+                <div class="itemNav">
+                  <button (click)="filtrarAmigo(amigo.id)" mat-stroked-button>{{ amigo.nombre }}</button>
+                  <div class="accionesIcons">
+                    <span (click)="editarAmigo(amigo.id)" mat-button>
+                      <mat-icon color="primary">edit</mat-icon>
+                    </span>
+                    <span (click)="eliminarAmigo(amigo.id)" mat-button>
+                      <mat-icon color="warn"> delete</mat-icon>
+                    </span>
+                  </div>
+                </div>
+              </mat-list-item>
+            </mat-nav-list>
+            <mat-list-item>
+              <button (click)="agregarAmigo()" mat-flat-button color="primary">Agregar Amigo<mat-icon color="accent">add</mat-icon></button>
+            </mat-list-item>
+          </mat-expansion-panel>
+        </mat-list-item>
+
+        <mat-list-item>
+          <button (click)="filtroRecordatorio()" mat-button><mat-icon color="accent">notifications</mat-icon>Recordatorios</button>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-accordion>
   </mat-drawer>
   <mat-drawer-content>
       <div style="text-align: center;min-height: 600px;">
