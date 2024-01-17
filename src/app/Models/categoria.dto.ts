@@ -2,6 +2,7 @@ export class CategoriaDTO {
   categoria_id!: string;
   categoria_nombre: string;
   categoria_color: string;
+  categoria_color_texto!: string;
   categoria_user_id!: string;
 
   constructor(data:any) {

@@ -5,6 +5,7 @@ import { Observable, catchError } from 'rxjs';
 import { CategoriaDTO } from '../Models/categoria.dto';
 import { LocalStorageService } from './local-storage.service';
 import { CategoriaOutDTO } from '../Models/categoriaOut.dto';
+import { TareaDTO } from '../Models/tarea.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -58,11 +59,11 @@ export class CategoriaServiceService implements OnInit {
 
   updateCategory(
     categoryId: string,
-    category: CategoriaDTO
-  ): Observable<CategoriaDTO> {
+    category: CategoriaOutDTO
+  ): Observable<string> {
     this.obtenerCredenciales();
     return this.http
-      .put<CategoriaDTO>(this.urlApi + "/" + categoryId, category,{headers:this.headers})
+      .put<string>(this.urlApi + "/" + categoryId, category,{headers:this.headers})
       .pipe(catchError(this.sharedService.handleError));
   }
 
@@ -73,10 +74,10 @@ export class CategoriaServiceService implements OnInit {
       .pipe(catchError(this.sharedService.handleError));
   }
 
-  getTasksByCategory(categoryId: string): Observable<any> {
+  getTasksByCategory(categoryId: string): Observable<TareaDTO[]> {
     this.obtenerCredenciales();
     return this.http
-      .get<any>(this.urlApi + "/tareas/" + categoryId, {headers:this.headers})
+      .get<TareaDTO[]>(this.urlApi + "/tareas/" + categoryId, {headers:this.headers})
       .pipe(catchError(this.sharedService.handleError));
   }
 }

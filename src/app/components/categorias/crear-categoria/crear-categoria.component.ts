@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import {
@@ -9,6 +9,7 @@ import {
   MatDialogClose,
   MatDialogTitle,
   MatDialogContent,
+  MAT_DIALOG_DATA,
  } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -23,7 +24,7 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
   templateUrl: './crear-categoria.component.html',
   styleUrls: ['./crear-categoria.component.scss']
 })
-export class CrearCategoriaComponent {
+export class CrearCategoriaComponent implements OnInit{
   categoria: CategoriaOutDTO;
   nombre: FormControl;
   colorCat: FormControl;
@@ -31,9 +32,11 @@ export class CrearCategoriaComponent {
   colorPalette: ThemePalette;
   isResLoaded: boolean = false;
   colorDin: string = "#ffffff";
+  titulo: string = "Agregar";
 
   constructor(
     @Optional() public dialogRef: MatDialogRef<CrearCategoriaComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private categoriaService: CategoriaServiceService,
@@ -54,9 +57,27 @@ export class CrearCategoriaComponent {
     });
 
   }
+  ngOnInit(): void {
+    if (this.data !=null && this.data.catId) {
+      this.titulo = "Modificar"
+      this.categoriaService.getCategoryById(this.data.catId).subscribe((cat)=>{
+        this.categoria.id = cat.data.categoria_id;
+        this.categoria.nombre = cat.data.categoria_nombre;
+        this.nombre.setValue(this.categoria.nombre);
+        this.categoria.color = cat.data.categoria_color;
+        this.colorCat.setValue(this.categoria.color);
+        this.colorDin = this.categoria.color;
+        this.categoria.user_id = cat.data.categoria_user_id;
+        this.categoriaForm = this.formBuilder.group({
+          nombre: this.nombre,
+          color: this.colorCat
+        });
+      });
+
+    }
+  }
 
   public cerrar(){
-    console.log("cerrar");
     this.dialogRef.close();
   }
 
@@ -69,19 +90,20 @@ export class CrearCategoriaComponent {
 
     let responseOK: boolean = false;
     let errorResponse: any;
-    this.categoriaService.createCategory(this.categoria)
+    if (this.data !=null && this.data.catId){
+      this.categoriaService.updateCategory(this.data.catId, this.categoria)
       .pipe(
         finalize(async () => {
           await this.sharedService.managementToast(
             "formFeedback",
             responseOK,
-            "Categoría agregada exitosamente!",
+            "Categoría actualizada exitosamente!",
             errorResponse
-          );
-          if(responseOK){
-            this.categoriaForm.reset();
-          }
-        })
+            );
+            if(responseOK){
+              this.categoriaForm.reset();
+            }
+          })
       )
       .subscribe(()=>{
         responseOK = true;
@@ -92,6 +114,31 @@ export class CrearCategoriaComponent {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
       });
+    }else{
+      this.categoriaService.createCategory(this.categoria)
+      .pipe(
+        finalize(async () => {
+          await this.sharedService.managementToast(
+            "formFeedback",
+            responseOK,
+            "Categoría agregada exitosamente!",
+            errorResponse
+            );
+            if(responseOK){
+              this.categoriaForm.reset();
+            }
+          })
+        )
+        .subscribe(()=>{
+          responseOK = true;
+          this.isResLoaded = false;
+        },
+        (error: HttpErrorResponse) =>{
+          responseOK = false;
+          errorResponse = error.error;
+          this.sharedService.errorLog(errorResponse);
+        });
+      }
     this.dialogRef.close(this.categoria);
   }
   public colorDinam(){

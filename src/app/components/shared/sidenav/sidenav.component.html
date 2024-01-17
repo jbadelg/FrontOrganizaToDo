@@ -3,13 +3,13 @@
     <mat-accordion class="example-headers-align" multi>
       <mat-nav-list>
         <mat-list-item>
-          <button routerLink="listarTareas" (click)="setPanel(-1)" mat-button><mat-icon color="accent">home</mat-icon>Home</button>
+          <button routerLink="listarTareas" (click)="home()" mat-button><mat-icon color="accent">home</mat-icon>Home</button>
         </mat-list-item>
         <mat-list-item class="expandir" >
           <mat-expansion-panel [expanded]="panel === 0" (opened)="setPanel(0)" hideToggle>
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <button routerLink="card" mat-button><mat-icon color="accent">calendar_month</mat-icon> Fechas</button>
+                <button  mat-button><mat-icon color="accent">calendar_month</mat-icon> Fechas</button>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-nav-list>
@@ -24,14 +24,14 @@
           <mat-expansion-panel [expanded]="panel === 1" (opened)="setPanel(1)" hideToggle>
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <button routerLink="slider" mat-button><mat-icon color="accent">category</mat-icon> Categorias</button>
+                <button mat-button><mat-icon color="accent">category</mat-icon> Categorias</button>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-nav-list>
               <mat-list-item *ngFor="let categoria of listaCategorias">
                 <div class="itemNav">
-                  <mat-chip-set class="barraCats">
-                    <mat-chip (click)="filtroCategoria(categoria.categoria_id)" [style.background-color]="categoria.categoria_color">
+                  <mat-chip-set class="barraCats" routerLink="/listarTareas/categorias/{{ categoria.categoria_id }}">
+                    <mat-chip  (click)="filtroCategoria(categoria.categoria_id)" [style.background-color]="categoria.categoria_color" [style.color]="categoria.categoria_color_texto" >
                       {{ categoria.categoria_nombre }}
                     </mat-chip>
                   </mat-chip-set>
@@ -56,13 +56,13 @@
           <mat-expansion-panel [expanded]="panel === 2" (opened)="setPanel(2)" hideToggle>
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <button routerLink="table" mat-button><mat-icon color="accent">diversity_3</mat-icon> Amigos</button>
+                <button mat-button><mat-icon color="accent">diversity_3</mat-icon> Amigos</button>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-nav-list>
               <mat-list-item *ngFor="let amigo of listaAmigos">
                 <div class="itemNav">
-                  <button (click)="filtrarAmigo(amigo.id)" mat-stroked-button>{{ amigo.nombre }}</button>
+                  <button routerLink="/listarTareas/amigos/{{ amigo.id }}" (click)="filtrarAmigo(amigo.id)" mat-stroked-button>{{ amigo.nombre }}</button>
                   <div class="accionesIcons">
                     <span (click)="editarAmigo(amigo.id)" mat-button>
                       <mat-icon color="primary">edit</mat-icon>
@@ -81,7 +81,7 @@
         </mat-list-item>
 
         <mat-list-item>
-          <button (click)="filtroRecordatorio()" mat-button><mat-icon color="accent">notifications</mat-icon>Recordatorios</button>
+          <button routerLink="/listarTareas/recordatorios/recordatorio" (click)="filtroRecordatorio()" mat-button><mat-icon color="accent">notifications</mat-icon>Recordatorios</button>
         </mat-list-item>
       </mat-nav-list>
     </mat-accordion>

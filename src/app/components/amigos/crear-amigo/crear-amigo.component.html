@@ -1,1 +1,29 @@
-<p>crear-amigo works!</p>
+<div style="margin-left: auto; margin-right: auto">
+  <p id="formFeedback"></p>
+</div>
+<h2 mat-dialog-title>{{titulo }} Amigo</h2>
+<mat-dialog-content>
+  <div class="container">
+    <form *ngIf="amigoForm" [formGroup]="amigoForm" (ngSubmit)="guardarAmigo()">
+      <mat-form-field appearance="fill" color="accent">
+        <mat-label>Nombre del amigo</mat-label>
+        <input matInput [formControl]="nombre" placeholder="Nombre amigo" />
+        <mat-error *ngIf="nombre.hasError('required')">El nombre de la Amigo es obligatorio</mat-error>
+        <mat-error *ngIf="nombre.hasError('maxlength')">El nombre de la tarea máximo 50 char</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" color="accent">
+        <mat-label>Email del amigo</mat-label>
+        <input matInput [formControl]="email" placeholder="Correo electrónico amigo" />
+        <mat-error *ngIf="email.hasError('pattern')">Formato de correo inválido </mat-error>
+      </mat-form-field>
+
+    </form>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="cerrar()">Cancelar</button>
+  <button mat-button (click)="guardarAmigo()" type="submit">Guardar</button>
+</mat-dialog-actions>
+
+

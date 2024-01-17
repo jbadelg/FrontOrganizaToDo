@@ -12,6 +12,9 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { ToggleService } from 'src/app/services/toggle.service';
 import { UserServiceService } from 'src/app/services/user-service.service';
 import { CrearCategoriaComponent } from '../../categorias/crear-categoria/crear-categoria.component';
+import { FeedbackService } from 'src/app/services/feedback.service';
+import { CrearAmigoComponent } from '../../amigos/crear-amigo/crear-amigo.component';
+import { AmigoServiceService } from 'src/app/services/amigo-service.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -31,6 +34,8 @@ export class SidenavComponent implements OnInit{
     private headerMenusService: HeaderMenusService,
     public toggleService: ToggleService,
     private categoriaService: CategoriaServiceService,
+    private amigoService: AmigoServiceService,
+    private sharedService: FeedbackService,
     private localStorageService: LocalStorageService,
     private userService: UserServiceService,
     public dialog: MatDialog
@@ -54,6 +59,10 @@ export class SidenavComponent implements OnInit{
     this.traerCategorias().subscribe();
     this.traerAmigos();
   }
+  public home(){
+    this.setPanel(-1);
+    this.router.navigate(['/listarTareas']);
+  }
   setPanel(activePanel: number){
     this.panel = activePanel;
   }
@@ -65,8 +74,23 @@ export class SidenavComponent implements OnInit{
     return this.userService.getUserCategorias().pipe(
       map(cats => {
         this.listaCategorias = cats.data.map((item:any) => new CategoriaDTO(item));
+        this.listaCategorias.map(cat=>{
+          cat.categoria_color_texto = this.colorTexto(cat.categoria_color);
+        });
       })
     )
+  }
+  public colorTexto(color: string): string {
+    const isColorOscuro = this.esColorOscuro(color);
+    return isColorOscuro ? 'white' : 'black';
+  }
+  public esColorOscuro(color: string): boolean{
+    const hex = color.substring(1); // Elimina el caracter '#'
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    const luminosidad = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminosidad < 0.5; // Devuelve verdadero si es oscuro
   }
   private traerAmigos() {
     this.userService.getUserAmigos().subscribe((amigos) => {
@@ -97,6 +121,13 @@ export class SidenavComponent implements OnInit{
   }
   public editarCategoria(catId: string) {
     console.log("editar ", catId );
+    const dialogRef = this.dialog.open(CrearCategoriaComponent, {
+      width: '25%',
+      data: {catId: catId}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.traerCategorias().subscribe();
+    });
   }
 
   public eliminarCategoria(catId: string) {
@@ -121,17 +152,36 @@ export class SidenavComponent implements OnInit{
 
   public editarAmigo(amigoId: string){
     console.log("editar amigo" + amigoId);
+    const dialogRef = this.dialog.open(CrearAmigoComponent, {
+      width: '25%',
+      data: {amigoId: amigoId}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.traerAmigos();
+    });
   }
 
   public eliminarAmigo(amigoId: string){
     console.log("eliminar amigo" + amigoId);
+    this.amigoService.deleteAmigo(amigoId).subscribe(()=>{
+      this.traerAmigos();
+    });
   }
 
   public agregarAmigo() {
     console.log("agregar amigo " );
+    const dialogRef = this.dialog.open(CrearAmigoComponent, {
+      width: '25%',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.traerAmigos();
+    });
   }
   public filtroRecordatorio() {
     this.setPanel(-1);
     console.log("filtrar por recordatorio" );
   }
+
+
 }
+

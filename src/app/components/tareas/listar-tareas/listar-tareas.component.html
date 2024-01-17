@@ -1,6 +1,6 @@
 <mat-list>
   <div class="list-header">
-    <h1>Todas tus tareas</h1>
+    <h1>{{titulo}}</h1>
     <!-- <button mat-button (click)="verFinalizadas()">Mostrar Finalizadas</button> -->
     <mat-slide-toggle [(ngModel)]="verFinalizadas" color="secondary">Ver Finalizadas</mat-slide-toggle>
   </div>
@@ -21,6 +21,9 @@
         </div>
         <div class="info-tarea">
           <div class="fecha-tarea">{{ tarea.fechaVencimiento | date:'shortDate' }}</div>
+          <div class="amigo-tarea" *ngIf="tarea.amigo_id != null">
+            <mat-icon >account_circle</mat-icon> {{ getAmigoNombre(tarea.amigo_id)}}
+          </div>
           <mat-chip-set class="categoria-tarea">
             <mat-chip [style.background-color]="tarea.categoria_color" style="font-size: 8px;">
               {{ tarea.categoria_nombre }}

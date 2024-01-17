@@ -31,8 +31,10 @@ export class ListarTareasComponent implements OnInit {
   listaAmigos: AmigoDTO[] = [];
   isResLoaded = false;
   categoryId: string | null;
+  amigoId: string | null;
   selectedOptions: string;
   verFinalizadas: boolean = true;
+  titulo: string = "Todas tus tareas"
 
   constructor(
     private router: Router,
@@ -43,27 +45,76 @@ export class ListarTareasComponent implements OnInit {
     private categoriaService: CategoriaServiceService,
     public dialog: MatDialog
   ) {
-      this.categoryId = null;
-      this.selectedOptions = '';
+    this.categoryId = null;
+    this.amigoId = null;
+    this.selectedOptions = '';
   }
 
   ngOnInit(): void {
+    this.sharedService.setLoading(true);
+
     forkJoin([
       this.traerCategorias(),
       this.traerAmigos()
     ]).subscribe(([categorias, amigos])=>{
-
-      this.activatedRoute.paramMap.subscribe((parms: ParamMap) => {
-        this.categoryId = parms.get("id");
+      // this.activatedRoute.paramMap.subscribe((parms: ParamMap) => {
+      //   this.categoryId = parms.get("id");
+        this.activatedRoute.params.subscribe(params =>{
+        this.categoryId = params["id_cat"];
+        this.amigoId = params["amigoId"];
+        let record = params["recordatorio"];
         if (this.categoryId) {
           this.getFiltredTasks(this.categoryId);
         } else {
-          this.getAllTasks1();
-          this.sharedService.setLoading(false);
+          if(this.amigoId){
+            this.getFiltroAmigo(this.categoryId);
+            this.titulo = "Amigo: " + this.getAmigoNombre(this.amigoId);
+          }else{
+            if(record){
+              this.titulo = "Recordatorios ";
+              this.getFiltroRecordatorio();
+            }else{
+              this.getAllTasks1();
+            }
+          }
         }
+        this.sharedService.setLoading(false);
       });
     });
   }
+  getFiltroRecordatorio() {
+    this.userService.getUserTasks().subscribe(
+      (tasks) => {
+        tasks.forEach((task, index) => {
+          const categoriaEncontrada = this.listaCategorias.find(cat => cat.categoria_id === task.categoria_id);
+          if (categoriaEncontrada) {
+            task.categoria_nombre = categoriaEncontrada.categoria_nombre;
+            task.categoria_color = categoriaEncontrada.categoria_color;
+          }
+        });
+        tasks = tasks.filter(tarea => tarea.tipoTarea == "recordatorio");
+        this.listaTareasRta = tasks;
+        this.listaTareas = this.listaTareasRta;
+      }
+    );
+  }
+
+  getFiltroAmigo(amigoId: string | null) {
+    this.userService.getUserTasks().subscribe(
+      (tasks) => {
+        tasks.forEach((task, index) => {
+          const categoriaEncontrada = this.listaCategorias.find(cat => cat.categoria_id === task.categoria_id);
+          if (categoriaEncontrada) {
+            task.categoria_nombre = categoriaEncontrada.categoria_nombre;
+            task.categoria_color = categoriaEncontrada.categoria_color;
+          }
+        });
+        this.listaTareasRta = tasks.filter(tarea => tarea.amigo_id != amigoId);
+        this.listaTareas = this.listaTareasRta;
+      }
+    );
+  }
+
   private traerCategorias() {
     return this.userService.getUserCategorias().pipe(
       map(cats => {
@@ -79,6 +130,11 @@ export class ListarTareasComponent implements OnInit {
         }
       })
     );
+  }
+
+  public getAmigoNombre(id: string): string | undefined{
+    let ami = this.listaAmigos.find(amigo => id == amigo.id);
+    return ami ? ami.nombre : undefined ;
   }
 
   getAllTasks() {
@@ -123,7 +179,6 @@ export class ListarTareasComponent implements OnInit {
   }
   getAllTasks1() {
     this.isResLoaded = true;
-    this.sharedService.setLoading(true);
     this.userService.getUserTasks().subscribe(
       (tasks) => {
         tasks.forEach((task, index) => {
@@ -135,7 +190,6 @@ export class ListarTareasComponent implements OnInit {
         });
         this.listaTareasRta = tasks;
         this.listaTareas = this.listaTareasRta;
-        this.sharedService.setLoading(false);
       }
     );
   }
@@ -143,16 +197,22 @@ export class ListarTareasComponent implements OnInit {
   getFiltredTasks(id: string) {
     this.isResLoaded = true;
     let errorResponse: any;
-    this.sharedService.setLoading(true);
+    let nombCat = this.listaCategorias.find(cat => cat.categoria_id == id);
+    this.titulo = "Categoria: " + nombCat?.categoria_nombre;
     this.categoriaService.getTasksByCategory(id).subscribe(
       (tasks) => {
+        tasks.forEach((task, index) => {
+          const categoriaEncontrada = this.listaCategorias.find(cat => cat.categoria_id === task.categoria_id);
+          if (categoriaEncontrada) {
+            task.categoria_nombre = categoriaEncontrada.categoria_nombre;
+            task.categoria_color = categoriaEncontrada.categoria_color;
+          }
+        });
         this.listaTareas = tasks;
         this.isResLoaded = false;
-        this.sharedService.setLoading(false);
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
-        this.sharedService.setLoading(false);
         this.sharedService.errorLog(errorResponse);
       }
     );
@@ -186,10 +246,11 @@ export class ListarTareasComponent implements OnInit {
 
   agregarTarea(){
     const dialogRef = this.dialog.open(CrearTareaComponent, {
-      width: '40%',
+      width: '50%',
     });
     dialogRef.afterClosed().subscribe(result => {
       this.getAllTasks1();
+      this.router.navigateByUrl("/listarTareas");
       this.sharedService.setLoading(false);
     });
   }

@@ -26,6 +26,21 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'listarTareas/categorias/:id_cat',
+    component: ListarTareasComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'listarTareas/amigos/:amigoId',
+    component: ListarTareasComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'listarTareas/recordatorios/:recordatorio',
+    component: ListarTareasComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'crearTarea',
     component: CrearTareaComponent,
     canActivate: [AuthGuard],
