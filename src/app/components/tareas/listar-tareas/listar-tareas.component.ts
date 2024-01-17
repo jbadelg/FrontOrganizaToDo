@@ -59,6 +59,7 @@ export class ListarTareasComponent implements OnInit {
           this.getFiltredTasks(this.categoryId);
         } else {
           this.getAllTasks1();
+          this.sharedService.setLoading(false);
         }
       });
     });
@@ -93,6 +94,7 @@ export class ListarTareasComponent implements OnInit {
 
         return forkJoin(observables).pipe(
           catchError(error => {
+            this.sharedService.setLoading(false);
             console.error('Error al obtener las categorías:', error);
             return of([]); // Devuelve un observable vacío en caso de error
           }),
@@ -114,6 +116,7 @@ export class ListarTareasComponent implements OnInit {
     ).subscribe(tareas => {},
       error => {
         console.error('Error al obtener las tareas:', error);
+        this.sharedService.setLoading(false);
         this.isResLoaded = false;
       }
     );
@@ -132,6 +135,7 @@ export class ListarTareasComponent implements OnInit {
         });
         this.listaTareasRta = tasks;
         this.listaTareas = this.listaTareasRta;
+        this.sharedService.setLoading(false);
       }
     );
   }
@@ -139,13 +143,16 @@ export class ListarTareasComponent implements OnInit {
   getFiltredTasks(id: string) {
     this.isResLoaded = true;
     let errorResponse: any;
+    this.sharedService.setLoading(true);
     this.categoriaService.getTasksByCategory(id).subscribe(
       (tasks) => {
         this.listaTareas = tasks;
         this.isResLoaded = false;
+        this.sharedService.setLoading(false);
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
+        this.sharedService.setLoading(false);
         this.sharedService.errorLog(errorResponse);
       }
     );
@@ -153,6 +160,7 @@ export class ListarTareasComponent implements OnInit {
 
   switchEstadoTarea(tarea: TareaDTO){
     this.isResLoaded = true;
+    this.sharedService.setLoading(true);
     console.log("id tarea a modif es  " + tarea.id );
     if(tarea.estadoTarea == "completada"){
       tarea.estadoTarea = "pendiente";
@@ -162,14 +170,17 @@ export class ListarTareasComponent implements OnInit {
     this.tareaService.updateTask(tarea).subscribe((tarea:any)=>{
       this.getAllTasks1();
       this.isResLoaded = false;
+      this.sharedService.setLoading(false);
     });
   }
   eliminarTarea(id: string) {
     this.isResLoaded = true;
+    this.sharedService.setLoading(true);
     console.log("borrando id " + id );
     this.tareaService.deleteTask(id).subscribe(()=>{
       this.getAllTasks1();
       this.isResLoaded = false;
+      this.sharedService.setLoading(false);
     })
   }
 
@@ -179,6 +190,7 @@ export class ListarTareasComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       this.getAllTasks1();
+      this.sharedService.setLoading(false);
     });
   }
 }

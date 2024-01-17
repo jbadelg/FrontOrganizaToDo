@@ -30,6 +30,7 @@ export class CrearCategoriaComponent {
   categoriaForm: FormGroup;
   colorPalette: ThemePalette;
   isResLoaded: boolean = false;
+  colorDin: string = "#ffffff";
 
   constructor(
     @Optional() public dialogRef: MatDialogRef<CrearCategoriaComponent>,
@@ -60,8 +61,6 @@ export class CrearCategoriaComponent {
   }
 
   public guardarCategoria(){
-    console.log("color palete" , this.categoriaForm.controls["color"].value.hex);
-
     if (this.categoriaForm.invalid) {
       return;
     }
@@ -94,5 +93,9 @@ export class CrearCategoriaComponent {
         this.sharedService.errorLog(errorResponse);
       });
     this.dialogRef.close(this.categoria);
+  }
+  public colorDinam(){
+    console.log("color  ", this.colorDin);
+    this.colorDin = "#" + this.categoriaForm.controls["color"].value.hex;
   }
 }

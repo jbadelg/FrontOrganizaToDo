@@ -103,7 +103,6 @@ export class SidenavComponent implements OnInit{
     this.categoriaService.deleteCategory(catId).subscribe(()=>{
       this.traerCategorias().subscribe();
     });
-    console.log("eliminar ", catId );
   }
 
   public agregarCategoria() {

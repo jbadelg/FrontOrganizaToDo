@@ -1,8 +1,14 @@
 <div style="margin-left: auto; margin-right: auto">
   <p id="formFeedback"></p>
 </div>
-<h2 mat-dialog-title>Agregar Categoría</h2>
-<mat-dialog-content>
+<h2 mat-dialog-title>Agregar Categoría
+  <mat-chip-set>
+    <mat-chip [style.background-color]="colorDin">
+      {{ nombre.value }}
+    </mat-chip>
+  </mat-chip-set>
+</h2>
+<mat-dialog-content (mouseenter)="colorDinam()">
   <div class="container">
     <form *ngIf="categoriaForm" [formGroup]="categoriaForm" (ngSubmit)="guardarCategoria()">
       <mat-form-field appearance="fill" color="accent">
@@ -11,10 +17,10 @@
         <mat-error *ngIf="nombre.hasError('required')">El nombre de la categoria es obligatorio</mat-error>
         <mat-error *ngIf="nombre.hasError('maxlength')">El nombre de la tarea máximo 25 char</mat-error>
       </mat-form-field>
-      <mat-form-field appearance="fill" color="accent">
-        <input matInput [ngxMatColorPicker]="picker" [formControl]="colorCat">
+      <mat-form-field appearance="fill" color="accent" (mouseleave)="colorDinam()" (focusout)="colorDinam()">
+        <input matInput [ngxMatColorPicker]="picker" [formControl]="colorCat" >
         <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
-        <ngx-mat-color-picker #picker [touchUi]="true" [color]="colorPalette"></ngx-mat-color-picker>
+        <ngx-mat-color-picker #picker [touchUi]="true" [color]="colorPalette" ></ngx-mat-color-picker>
         <mat-error *ngIf="colorCat.hasError('pattern')">Color invalido</mat-error>
     </mat-form-field>
     </form>

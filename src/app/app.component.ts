@@ -16,7 +16,8 @@ export class AppComponent implements OnInit{
 
   constructor(
     private localStorageService: LocalStorageService,
-    private headerMenusService: HeaderMenusService
+    private headerMenusService: HeaderMenusService,
+    private feedbackService: FeedbackService
   ) {
     this.loading = false;
   }
@@ -29,6 +30,10 @@ export class AppComponent implements OnInit{
     if(token){
       this.headerMenusService.headerManagement.next(headerInfo);
     }
+
+    this.feedbackService.getLoading().subscribe((loading)=>{
+      this.loading = loading;
+    });
   }
 
 }

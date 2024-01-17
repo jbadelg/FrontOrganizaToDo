@@ -71,6 +71,7 @@ export class RegistroComponent implements OnInit {
     this.isValidForm = false;
     let responseOK: boolean = false;
     let errorResponse: any;
+    this.sharedService.setLoading(true);
 
     if (this.registroForm.invalid) {
       return;
@@ -100,6 +101,7 @@ export class RegistroComponent implements OnInit {
               showNoAuthSection: false,
             };
             this.registroForm.reset();
+            this.sharedService.setLoading(false);
             this.headerMenusService.headerManagement.next(headerInfo);
             this.router.navigateByUrl("listarTareas");
           }
@@ -149,6 +151,7 @@ export class RegistroComponent implements OnInit {
             const dia = fechaActual.getDate().toString().padStart(2, '0');
             tarea.fechaInicio = `${año}${mes}${dia}`;
             this.tareaService.createTask(tarea).subscribe();
+            this.sharedService.setLoading(false);
           });
 
         },
@@ -161,6 +164,7 @@ export class RegistroComponent implements OnInit {
             showNoAuthSection: true,
           };
 
+          this.sharedService.setLoading(false);
           this.headerMenusService.headerManagement.next(headerInfo);
           this.sharedService.errorLog(errorResponse);
         }

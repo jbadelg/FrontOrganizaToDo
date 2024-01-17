@@ -88,6 +88,7 @@ export class LoginComponent {
               showAuthSection: true,
               showNoAuthSection: false,
             };
+            this.sharedService.setLoading(false);
             this.headerMenusService.headerManagement.next(headerInfo);
             this.router.navigateByUrl("listarTareas");
           }
@@ -105,6 +106,7 @@ export class LoginComponent {
             resp.token
           );
           this.localStorageService.set("user_name", resp.user.name);
+          this.sharedService.setLoading(false);
         },
         (error: HttpErrorResponse) => {
           responseOK = false;
@@ -114,7 +116,7 @@ export class LoginComponent {
             showNoAuthSection: true,
           };
           this.headerMenusService.headerManagement.next(headerInfo);
-
+          this.sharedService.setLoading(false);
           this.sharedService.errorLog(error.error);
         }
       );
