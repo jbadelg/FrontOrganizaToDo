@@ -151,7 +151,7 @@ export class CrearTareaComponent implements OnInit {
     if (this.tareaForm.controls["valor"].value) {
       this.tarea.valor = this.tareaForm.controls["valor"].value.replace(/[^\d]/g, '');
     }
-    if (this.esRecordatorio) {
+    if (this.esRecordatorio.value ) {
       this.tarea.tipoTarea = "recordatorio";
     }
     // console.log("tarea: ", this.tarea);
@@ -181,6 +181,9 @@ export class CrearTareaComponent implements OnInit {
       )
       .subscribe(()=>{
         responseOK = true;
+        this.tareaForm.reset();
+        this.tarea = new TareaDTO('','','','');
+        this.tarea.tipoTarea = "";
         this.isResLoaded = false;
       },
       (error: HttpErrorResponse) => {
@@ -191,6 +194,11 @@ export class CrearTareaComponent implements OnInit {
     // this.tareaService.createTask(this.tarea).subscribe(()=>{
     //   this.isResLoaded = false;
     // });
+    this.tarea = new TareaDTO('','','','');
+    this.amigos = [];
+    this.categorias = [];
+    this.esRecordatorio.setValue(false);
+    this.tareaForm.reset();
     this.dialogRef.close({ nombreTarea: this.nombre });
   }
 

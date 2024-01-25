@@ -74,6 +74,7 @@ export class RegistroComponent implements OnInit {
     this.sharedService.setLoading(true);
 
     if (this.registroForm.invalid) {
+      this.sharedService.setLoading(false);
       return;
     }
     this.isValidForm = true;

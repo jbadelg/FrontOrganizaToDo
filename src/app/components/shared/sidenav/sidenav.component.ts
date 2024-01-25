@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
@@ -15,13 +15,14 @@ import { CrearCategoriaComponent } from '../../categorias/crear-categoria/crear-
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { CrearAmigoComponent } from '../../amigos/crear-amigo/crear-amigo.component';
 import { AmigoServiceService } from 'src/app/services/amigo-service.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss']
 })
-export class SidenavComponent implements OnInit{
+export class SidenavComponent implements OnInit, OnDestroy, AfterViewInit{
   showNoAuthSection: boolean;
   panel = -1;
   showAuthSection: boolean;
@@ -38,10 +39,26 @@ export class SidenavComponent implements OnInit{
     private sharedService: FeedbackService,
     private localStorageService: LocalStorageService,
     private userService: UserServiceService,
+    private autService: AuthService,
     public dialog: MatDialog
   ){
+    this.listaCategorias = [];
+    this.listaAmigos = [];
     this.showAuthSection = false;
     this.showNoAuthSection = true;
+  }
+  ngAfterViewInit(): void {
+    // if (this.autService.isLoggedIn()) {
+      this.traerCategorias().subscribe();
+      this.traerAmigos();
+    // }
+  }
+  ngOnDestroy(): void {
+    this.listaCategorias = [];
+    this.listaAmigos = [];
+    this.showAuthSection = false;
+    this.showNoAuthSection = true;
+    window.removeEventListener('beforeunload', this.onBeforeUnload.bind(this));
   }
 
   ngOnInit(): void {
@@ -50,15 +67,29 @@ export class SidenavComponent implements OnInit{
         if (headerInfo) {
           this.showAuthSection = headerInfo.showAuthSection;
           this.showNoAuthSection = headerInfo.showNoAuthSection;
+          if (!this.showAuthSection) {
+            this.listaCategorias = [];
+            this.listaAmigos = [];
+          }
         }
       }
     );
     this.toggleService.$toogle.subscribe(()=>{
       this.toggleDrawer();
     });
-    this.traerCategorias().subscribe();
-    this.traerAmigos();
+    window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
+    if (this.autService.isLoggedIn()) {
+      this.traerCategorias().subscribe();
+      this.traerAmigos();
+    }
   }
+
+  onBeforeUnload(event: Event): void {
+    this.localStorageService.remove("access_token");
+    this.localStorageService.remove("user_id");
+    this.localStorageService.remove("user_name");
+  }
+
   public home(){
     this.setPanel(-1);
     this.router.navigate(['/listarTareas']);
