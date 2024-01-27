@@ -17,7 +17,8 @@ export class TareaServiceService implements OnInit {
     private localStorageService: LocalStorageService,
     ) {
       this.token = '';
-    this.urlApi = "http://127.0.0.1:8000/api/tareas";
+    this.urlApi = "https://arcane-lowlands-69580-7020d2b6f174.herokuapp.com/api/tareas";
+    // this.urlApi = "http://127.0.0.1:8000/api/tareas";
   }
   ngOnInit(): void {
     this.obtenerCredenciales();

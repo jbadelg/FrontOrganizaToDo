@@ -21,7 +21,8 @@ export class CategoriaServiceService implements OnInit {
     private sharedService: FeedbackService
   ) {
     this.token = '';
-    this.urlApi = "http://127.0.0.1:8000/api/categorias";
+    this.urlApi = "https://arcane-lowlands-69580-7020d2b6f174.herokuapp.com/api/categorias";
+    // this.urlApi = "http://127.0.0.1:8000/api/categorias";
   }
 
   ngOnInit(): void {

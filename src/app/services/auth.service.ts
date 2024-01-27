@@ -26,7 +26,8 @@ export class AuthService implements OnInit{
     private sharedService: FeedbackService
   ) {
     this.controller = "";
-    this.urlApi = "http://localhost:8000/api/";
+    this.urlApi = "https://arcane-lowlands-69580-7020d2b6f174.herokuapp.com/api/";
+    // this.urlApi = "http://localhost:8000/api/";
     this.headers = new HttpHeaders({'Content-Type':'application/json', 'Accept':'application/json'});
     this.httpOptions = {
       headers: new HttpHeaders({'Content-Type':'application/json', 'Accept':'application/json'}),
@@ -75,7 +76,8 @@ export class AuthService implements OnInit{
   }
 
   getToken(): Observable<any> {
-    let url = "http://127.0.0.1:8000/sanctum/csrf-cookie";
+    let url = "https://arcane-lowlands-69580-7020d2b6f174.herokuapp.com/csrf-cookie";
+    // let url = "http://127.0.0.1:8000/sanctum/csrf-cookie";
     return this.http.get(url, this.httpOptions);
     // return this.http.get(url);
   }
